@@ -34,7 +34,7 @@ drop-db:
 
 .PHONY: migrate-up
 migrate-up:
-	migrate -path db/sqlc/migrations -database "postgresql://$(db_username):$(db_password)@localhost:5432/$(db_name)?sslmode=disable" -verbose up
+	migrate -path db/sqlc/migrations -database "postgresql://root:secret123@localhost:5432/simple_bank?sslmode=disable" -verbose up
 
 .PHONY: migrate-down
 migrate-down:
