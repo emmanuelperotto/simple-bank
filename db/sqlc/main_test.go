@@ -32,8 +32,9 @@ func TestMain(m *testing.M) {
 	driver, err := postgres.WithInstance(testDb, &postgres.Config{})
 	dir, err := os.Getwd()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Error getting working dir: ", err)
 	}
+	log.Println("Working dir: ", dir)
 
 	migration, err := migrate.NewWithDatabaseInstance(
 		"file://"+dir+"/migrations",
@@ -49,7 +50,7 @@ func TestMain(m *testing.M) {
 	exitCode := m.Run()
 
 	if err := testDb.Close(); err != nil {
-		log.Fatal(err)
+		log.Fatal("Error closing db: ", err)
 	}
 
 	os.Exit(exitCode)
