@@ -14,10 +14,17 @@ jobs:
       postgres:
         image: postgres
         env:
+          # optional (defaults to `postgres`)
           POSTGRES_DB: simple_bank
-          POSTGRES_USER: root
+          # required
           POSTGRES_PASSWORD: secret123
-        # Set health checks to wait until postgres has started
+          # optional (defaults to `5432`)
+          POSTGRES_PORT: 5432
+          # optional (defaults to `postgres`)
+          POSTGRES_USER: root
+        ports:
+          - 5432:5432
+          # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
