@@ -2,9 +2,6 @@ package db
 
 import (
 	"database/sql"
-	"errors"
-	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 	"log"
@@ -27,23 +24,6 @@ func TestMain(m *testing.M) {
 	testDb, err = sql.Open(dbDriver, dbSource)
 	if err != nil {
 		log.Fatal("Cannot connect to db: ", err)
-	}
-
-	driver, err := postgres.WithInstance(testDb, &postgres.Config{})
-	dir, err := os.Getwd()
-	if err != nil {
-		log.Fatal("Error getting working dir: ", err)
-	}
-	log.Println("Working dir: ", dir)
-
-	migration, err := migrate.NewWithDatabaseInstance(
-		"file://"+dir+"/migrations",
-		"postgres", driver)
-	if err != nil {
-		log.Fatal("Cannot run migrations: ", err)
-	}
-	if err = migration.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
-		log.Fatal("Error running UP migrations: ", err)
 	}
 
 	testQueries = New(testDb)
