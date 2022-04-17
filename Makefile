@@ -34,11 +34,11 @@ drop-db:
 
 .PHONY: migrate-up
 migrate-up:
-	migrate -path db/migration -database "postgresql://$(db_username):$(db_password)@localhost:5432/$(db_name)?sslmode=disable" -verbose up
+	migrate -path db/sqlc/migrations -database "postgresql://$(db_username):$(db_password)@localhost:5432/$(db_name)?sslmode=disable" -verbose up
 
 .PHONY: migrate-down
 migrate-down:
-	migrate -path db/migration -database "postgresql://$(db_username):$(db_password)@localhost:5432/$(db_name)?sslmode=disable" -verbose down
+	migrate -path db/sqlc/migrations -database "postgresql://$(db_username):$(db_password)@localhost:5432/$(db_name)?sslmode=disable" -verbose down
 
 .PHONY: sqlc
 sqlc:
