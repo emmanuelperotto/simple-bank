@@ -78,7 +78,6 @@ LIMIT 1
 `
 
 func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
-	//return Account{}, nil
 	row := q.db.QueryRowContext(ctx, getAccount, id)
 	var i Account
 	err := row.Scan(
@@ -130,7 +129,7 @@ func (q *Queries) ListAccounts(ctx context.Context, arg ListAccountsParams) ([]A
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Account
+	items := []Account{}
 	for rows.Next() {
 		var i Account
 		if err := rows.Scan(

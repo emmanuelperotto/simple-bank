@@ -42,7 +42,7 @@ migrate-down:
 
 .PHONY: sqlc
 sqlc:
-	sqlc generate
+	docker run --rm -v $(shell pwd):/src -w /src kjconroy/sqlc generate
 
 .PHONY: test
 test:
