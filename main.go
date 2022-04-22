@@ -6,16 +6,15 @@ import (
 	"log"
 	"simplebank/api"
 	db "simplebank/db/sqlc"
-)
-
-const (
-	dbDriver      = "postgres"
-	dbSource      = "postgresql://root:secret123@localhost:5432/simple_bank?sslmode=disable"
-	serverAddress = "0.0.0.0:8080"
+	"simplebank/util"
 )
 
 func main() {
-	sqlDB, err := sql.Open(dbDriver, dbSource)
+	config, err := util.LoadConfig(".")
+	if err != nil {
+		log.Fatal("Error loading initial config: ", err)
+	}
+	sqlDB, err := sql.Open(config.DBDriver, config.DBSource)
 	defer func() {
 		if err := sqlDB.Close(); err != nil {
 			log.Fatal("Error closing DB: ", err)
@@ -32,7 +31,7 @@ func main() {
 	store := db.NewStore(sqlDB)
 	server := api.NewServer(store)
 
-	if err := server.Start(serverAddress); err != nil {
+	if err := server.Start(config.ServerAddress); err != nil {
 		log.Fatal("Can't start server: ", err)
 	}
 }
