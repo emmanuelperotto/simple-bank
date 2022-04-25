@@ -75,7 +75,11 @@ func TestQueries_GetAccount(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, tt.testingFunc)
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			tt.testingFunc(t)
+		})
 	}
 }
 
@@ -87,7 +91,6 @@ func TestQueries_DeleteAccount(t *testing.T) {
 		{
 			name: "When accounts exists",
 			testingFunc: func(t *testing.T) {
-				t.Parallel()
 				account, err := randomAccount(context.Background())
 
 				require.NoError(t, err)
@@ -100,15 +103,16 @@ func TestQueries_DeleteAccount(t *testing.T) {
 		{
 			name: "When accounts doesn't exist",
 			testingFunc: func(t *testing.T) {
-				t.Parallel()
-
 				err := testQueries.DeleteAccount(context.Background(), -10)
 				require.NoError(t, err)
 			},
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, tt.testingFunc)
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			tt.testingFunc(t)
+		})
 	}
 }
 
@@ -120,7 +124,6 @@ func TestQueries_ListAccounts(t *testing.T) {
 		{
 			name: "When there are accounts to be shown",
 			testingFunc: func(t *testing.T) {
-				t.Parallel()
 				ctx := context.Background()
 				numAccounts := 5
 
@@ -141,7 +144,10 @@ func TestQueries_ListAccounts(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, tt.testingFunc)
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			tt.testingFunc(t)
+		})
 	}
 }
 
@@ -153,7 +159,6 @@ func TestQueries_UpdateAccount(t *testing.T) {
 		{
 			name: "Successful update",
 			testingFunc: func(t *testing.T) {
-				t.Parallel()
 				ctx := context.Background()
 
 				account, err := randomAccount(ctx)
@@ -175,7 +180,6 @@ func TestQueries_UpdateAccount(t *testing.T) {
 		{
 			name: "When account doesn't exist",
 			testingFunc: func(t *testing.T) {
-				t.Parallel()
 				ctx := context.Background()
 
 				_, err := testQueries.UpdateAccount(ctx, UpdateAccountParams{
@@ -189,7 +193,11 @@ func TestQueries_UpdateAccount(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, tt.testingFunc)
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			tt.testingFunc(t)
+		})
 	}
 }
 

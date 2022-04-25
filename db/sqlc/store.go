@@ -6,9 +6,15 @@ import (
 	"fmt"
 )
 
-//Store provides all functions to execute db queries and transactions
 type (
-	Store struct {
+	//Store provides all functions to execute db queries and transactions
+	Store interface {
+		Querier
+		TransferTx(ctx context.Context, params TransferTxParams) (result TransferTxResult, err error)
+	}
+
+	//SQLStore provides all functions to execute SQL queries and transactions
+	SQLStore struct {
 		*Queries
 		db *sql.DB
 	}
@@ -35,15 +41,15 @@ type (
 	}
 )
 
-//NewStore creates a new Store
-func NewStore(db *sql.DB) *Store {
-	return &Store{
+//NewStore creates a new SQLStore
+func NewStore(db *sql.DB) SQLStore {
+	return SQLStore{
 		Queries: New(db),
 		db:      db,
 	}
 }
 
-func (s *Store) execTx(ctx context.Context, fn func(queries *Queries) error) error {
+func (s SQLStore) execTx(ctx context.Context, fn func(queries *Queries) error) error {
 	tx, err := s.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
@@ -63,7 +69,7 @@ func (s *Store) execTx(ctx context.Context, fn func(queries *Queries) error) err
 
 //TransferTx performs a money transfer from one account to the other
 // It creates a transfer record, add account entries and update accounts' balance within a single database transaction
-func (s *Store) TransferTx(ctx context.Context, params TransferTxParams) (result TransferTxResult, err error) {
+func (s SQLStore) TransferTx(ctx context.Context, params TransferTxParams) (result TransferTxResult, err error) {
 	err = s.execTx(ctx, func(queries *Queries) error {
 		if result.Transfer, err = queries.CreateTransfer(ctx, CreateTransferParams{
 			FromAccountID: params.FromAccountID,

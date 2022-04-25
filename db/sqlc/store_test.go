@@ -7,6 +7,7 @@ import (
 )
 
 func TestStore_TransferTx(t *testing.T) {
+	t.Parallel()
 	store := NewStore(testDb)
 	ctx := context.Background()
 
@@ -76,6 +77,7 @@ func TestStore_TransferTx(t *testing.T) {
 }
 
 func TestStore_TransferTxDeadLock(t *testing.T) {
+	t.Parallel()
 	store := NewStore(testDb)
 	ctx := context.Background()
 

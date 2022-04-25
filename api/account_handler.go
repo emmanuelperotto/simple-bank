@@ -11,7 +11,7 @@ import (
 //accountHandler handles all HTTP requests in Accounts domain.
 type (
 	accountHandler struct {
-		store *db.Store
+		store db.Store
 	}
 	createAccountRequest struct {
 		Owner    string `json:"owner" binding:"required"`
@@ -27,7 +27,7 @@ type (
 )
 
 //newAccountHandler builds accountHandler struct
-func newAccountHandler(store *db.Store) accountHandler {
+func newAccountHandler(store db.Store) accountHandler {
 	return accountHandler{
 		store: store,
 	}

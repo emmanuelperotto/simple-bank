@@ -29,6 +29,7 @@ func TestQueries_CreateEntry(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			ctx := context.Background()
 
 			account, err := randomAccount(ctx)
@@ -39,6 +40,7 @@ func TestQueries_CreateEntry(t *testing.T) {
 				AccountID: account.ID,
 				Amount:    tt.params.Amount,
 			})
+			require.NoError(t, err)
 
 			require.Equal(t, tt.params.Amount, entry.Amount)
 			require.Equal(t, account.ID, entry.AccountID)
@@ -87,7 +89,10 @@ func TestQueries_GetEntry(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, tt.testingFunc)
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			tt.testingFunc(t)
+		})
 	}
 }
 
@@ -126,6 +131,9 @@ func TestQueries_ListEntries(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, tt.testingFunc)
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			tt.testingFunc(t)
+		})
 	}
 }

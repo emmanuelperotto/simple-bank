@@ -14,7 +14,7 @@ shutdown: remove-postgres
 
 .PHONY: wait
 wait:
-	sleep 3
+	sleep 2
 
 .PHONY: remove-postgres
 remove-postgres:
@@ -39,6 +39,10 @@ migrate-up:
 .PHONY: migrate-down
 migrate-down:
 	migrate -path db/sqlc/migrations -database "postgresql://$(db_username):$(db_password)@localhost:5432/$(db_name)?sslmode=disable" -verbose down
+
+.PHONY: mocks
+mocks:
+	mockgen -destination=./db/sqlc/mock/store_mock.go --package=mockdb simplebank/db/sqlc Store
 
 .PHONY: sqlc
 sqlc:
